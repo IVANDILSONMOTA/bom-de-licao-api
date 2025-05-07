@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "start": "npx prisma generate && npx tsx src/server.ts"
+    "start": "tsx src/server.ts"
   },
   "keywords": [],
   "author": "",
