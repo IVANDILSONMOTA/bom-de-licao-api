@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Administrador</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script>
+    async function loginAdmin(event) {
+      event.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      const res = await fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+
+      if (data.token) {
+        const payload = JSON.parse(atob(data.token.split('.')[1]));
+        if (payload.isAdmin) {
+          localStorage.setItem("token", data.token);
+          window.location.href = "/admin/index.html";
+        } else {
+          alert("Você não tem permissão de administrador.");
+        }
+      } else {
+        alert(data.error || "Falha no login.");
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="quiz-container">
+    <h1>Login Admin</h1>
+    <form onsubmit="loginAdmin(event)">
+      <input type="email" id="email" placeholder="Email" required><br><br>
+      <input type="password" id="password" placeholder="Senha" required><br><br>
+      <button type="submit">Entrar</button>
+    </form>
+    <br>
+    <a href="/quiz.html"><button>Voltar ao Quiz</button></a>
+  </div>
+</body>
+</html>

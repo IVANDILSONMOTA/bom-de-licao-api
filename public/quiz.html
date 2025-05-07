@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Bom de Lição - Quiz</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div id="quiz-container">
+    <h1>Quiz da Lição</h1>
+    
+    <div style="margin-bottom: 10px;">
+      <label>Categoria:</label>
+      <select id="categoria">
+        <option value="">Todas</option>
+        <option value="Evangelhos">Evangelhos</option>
+        <option value="Profecia">Profecia</option>
+        <option value="Pentateuco">Pentateuco</option>
+      </select>
+
+      <label>Dificuldade:</label>
+      <select id="dificuldade">
+        <option value="">Todas</option>
+        <option value="Fácil">Fácil</option>
+        <option value="Médio">Médio</option>
+        <option value="Difícil">Difícil</option>
+      </select>
+
+      <button onclick="buscarComFiltro()">Buscar</button>
+    </div>
+
+    <div id="question-box">
+      <p id="question">Carregando pergunta...</p>
+      <div id="answers"></div>
+    </div>
+    <p id="feedback"></p>
+    <button id="next-btn" style="display: none;">Próxima</button>
+  </div>
+
+  <script>
+    let currentQuestion = null;
+
+    async function fetchQuestion(query = '') {
+      const res = await fetch("/quiz/random" + query);
+      const data = await res.json();
+      currentQuestion = data;
+      document.getElementById("question").textContent = data.question;
+      const answersEl = document.getElementById("answers");
+      answersEl.innerHTML = "";
+      data.options.forEach((opt) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(opt);
+        answersEl.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(selected) {
+      const correct = currentQuestion.answer;
+      const feedbackEl = document.getElementById("feedback");
+      if (selected === correct) {
+        feedbackEl.textContent = "✅ Acertou!";
+        feedbackEl.style.color = "lightgreen";
+      } else {
+        feedbackEl.textContent = "❌ Errou! Resposta correta: " + correct;
+        feedbackEl.style.color = "red";
+      }
+      document.getElementById("next-btn").style.display = "block";
+    }
+
+    function buscarComFiltro() {
+      const cat = document.getElementById("categoria").value;
+      const dif = document.getElementById("dificuldade").value;
+      const query = `?category=${cat}&difficulty=${dif}`;
+      fetchQuestion(query);
+      document.getElementById("feedback").textContent = "";
+      document.getElementById("next-btn").style.display = "none";
+    }
+
+    document.getElementById("next-btn").onclick = () => buscarComFiltro();
+    window.onload = () => fetchQuestion();
+  </script>
+</body>
+</html>

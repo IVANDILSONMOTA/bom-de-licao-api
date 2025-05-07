@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Atualizar Avatar</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>👤 Atualizar Avatar</h1>
+    <form id="form-avatar" enctype="multipart/form-data">
+      <input type="file" name="avatar" accept="image/*" required />
+      <button type="submit">Enviar</button>
+    </form>
+    <p><a href="/admin/index.html">⬅ Voltar</a></p>
+  </div>
+
+  <script>
+    document.getElementById("form-avatar").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const res = await fetch("/admin/avatar", {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+      alert(data.message || "Avatar atualizado!");
+    });
+  </script>
+</body>
+</html>
