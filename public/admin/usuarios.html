@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Usuários</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script>
+    async function carregarUsuarios() {
+      const res = await fetch('/api/admin/usuarios', {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      });
+      const data = await res.json();
+      const lista = document.getElementById('lista');
+      lista.innerHTML = '';
+      data.forEach((u) => {
+        const item = document.createElement('li');
+        item.innerHTML = \`\${u.name} (\${u.email || "sem e-mail"}) \${u.isAdmin ? "👑 Admin" : "<button onclick='tornarAdmin(" + u.id + ")'>Tornar Admin</button>"}\`;
+        lista.appendChild(item);
+      });
+    }
+
+    async function tornarAdmin(id) {
+      await fetch('/api/admin/usuarios/' + id + '/promover', {
+        method: 'PATCH',
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      });
+      carregarUsuarios();
+    }
+
+    window.onload = carregarUsuarios;
+  </script>
+</head>
+<body>
+  <div id="quiz-container">
+    <h1>Usuários</h1>
+    <ul id="lista"></ul>
+    <a href="/admin/index.html"><button>⬅ Voltar</button></a>
+  </div>
+</body>
+</html>

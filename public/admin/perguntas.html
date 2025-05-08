@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerenciar Perguntas</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script>
+    async function carregarPerguntas() {
+      const res = await fetch('/api/admin/perguntas', {
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+      });
+      const data = await res.json();
+      const lista = document.getElementById('lista');
+      lista.innerHTML = '';
+      data.forEach((p) => {
+        const item = document.createElement('li');
+        item.innerHTML = `
+          <strong>${p.question}</strong> (${p.category}, ${p.difficulty})
+          <button onclick="editar(${p.id}, this)">✏️ Editar</button>
+          <button onclick="deletar(${p.id})">🗑 Apagar</button>
+          <div style='display:none; margin-top:10px;' id="edit-${p.id}">
+            <input value="${p.question}" id="q-${p.id}" placeholder="Pergunta"><br>
+            <input value="${p.optionA}" id="a-${p.id}" placeholder="Opção A">
+            <input value="${p.optionB}" id="b-${p.id}" placeholder="Opção B"><br>
+            <input value="${p.optionC}" id="c-${p.id}" placeholder="Opção C">
+            <input value="${p.optionD}" id="d-${p.id}" placeholder="Opção D"><br>
+            <input value="${p.answer}" id="r-${p.id}" placeholder="Resposta correta"><br>
+            <input value="${p.category}" id="cat-${p.id}" placeholder="Categoria">
+            <input value="${p.difficulty}" id="dif-${p.id}" placeholder="Dificuldade"><br>
+            <button onclick="salvar(${p.id})">💾 Salvar</button>
+          </div>
+        `;
+        lista.appendChild(item);
+      });
+    }
+
+    function editar(id, btn) {
+      document.getElementById('edit-' + id).style.display = 'block';
+      btn.disabled = true;
+    }
+
+    async function salvar(id) {
+      const payload = {
+        question: document.getElementById("q-" + id).value,
+        optionA: document.getElementById("a-" + id).value,
+        optionB: document.getElementById("b-" + id).value,
+        optionC: document.getElementById("c-" + id).value,
+        optionD: document.getElementById("d-" + id).value,
+        answer: document.getElementById("r-" + id).value,
+        category: document.getElementById("cat-" + id).value,
+        difficulty: document.getElementById("dif-" + id).value
+      };
+      await fetch('/api/admin/perguntas/' + id, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        body: JSON.stringify(payload)
+      });
+      carregarPerguntas();
+    }
+
+    async function deletar(id) {
+      if (confirm("Tem certeza que deseja apagar esta pergunta?")) {
+        await fetch('/api/admin/perguntas/' + id, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+          }
+        });
+        carregarPerguntas();
+      }
+    }
+
+    window.onload = carregarPerguntas;
+  </script>
+</head>
+<body>
+  <div id="quiz-container">
+    <h1>Gerenciar Perguntas</h1>
+    <ul id="lista"></ul>
+    <a href="/admin/index.html"><button>⬅ Voltar</button></a>
+  </div>
+</body>
+</html>
