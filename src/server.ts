@@ -1,4 +1,3 @@
-
 import Fastify from "fastify";
 import fastifyStatic from "@fastify/static";
 import path from "path";
@@ -29,7 +28,11 @@ app.get("/", async () => {
   return { message: "Bom de Lição API rodando!" };
 });
 
-app.listen({ port: 3000 }, (err, address) => {
+// Ajustado para Render: escutar na porta e host corretos
+app.listen({
+  port: Number(process.env.PORT) || 3000,
+  host: '0.0.0.0'
+}, (err, address) => {
   if (err) {
     console.error(err);
     process.exit(1);
