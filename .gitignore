@@ -13,3 +13,6 @@ prisma/dev.db-journal
 
 # VSCode
 .vscode
+.env
+node_modules/
+dist/
