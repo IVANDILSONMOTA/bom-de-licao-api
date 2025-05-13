@@ -4,8 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc",
-    "postinstall": "prisma generate",
+    "build": "npx prisma generate && tsc",
     "start": "node dist/server.js"
   },
   "keywords": [],
@@ -22,8 +21,8 @@
     "zod": "^3.24.3"
   },
   "devDependencies": {
+    "prisma": "^6.7.0",
     "@types/node": "^22.15.2",
-    "typescript": "^5.8.3",
-    "prisma": "^6.7.0"
+    "typescript": "^5.8.3"
   }
 }
