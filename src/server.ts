@@ -1,41 +1,28 @@
-import Fastify from "fastify";
-import fastifyStatic from "@fastify/static";
-import path from "path";
+import Fastify from 'fastify'
+import cors from '@fastify/cors'
+import { authRoutes } from './routes/authRoutes'
+import { userRoutes } from './routes/userRoutes'
+import { rankingRoutes } from './routes/rankingRoutes'
+import { quizRoutes } from './routes/quizRoutes'
+import { adminRoutes } from './routes/adminRoutes'
 
-import { userRoutes } from "./routes/userRoutes";
-import { quizRoutes } from "./routes/quizRoutes";
-import { authRoutes } from "./routes/authRoutes";
-import { rankingRoutes } from "./routes/rankingRoutes";
-import { adminRoutes } from "./routes/adminRoutes";
+async function main() {
+  const app = Fastify()
 
-const app = Fastify();
+  await app.register(cors, {
+    origin: true
+  })
 
-// Servir arquivos estáticos
-app.register(require("@fastify/static"), {
-  root: path.join(__dirname, "..", "public"),
-  prefix: "/",
-});
+  app.register(authRoutes)
+  app.register(userRoutes)
+  app.register(rankingRoutes)
+  app.register(quizRoutes)
+  app.register(adminRoutes)
 
-// Registrar rotas
-app.register(userRoutes);
-app.register(quizRoutes);
-app.register(authRoutes);
-app.register(rankingRoutes);
-app.register(adminRoutes);
+  const port = Number(process.env.PORT) || 3000
+  await app.listen({ port, host: '0.0.0.0' })
 
-// Rota base
-app.get("/", async () => {
-  return { message: "Bom de Lição API rodando!" };
-});
+  console.log(`🚀 Servidor rodando em http://localhost:${port}`)
+}
 
-// Ajustado para Render: escutar na porta e host corretos
-app.listen({
-  port: Number(process.env.PORT) || 3000,
-  host: '0.0.0.0'
-}, (err, address) => {
-  if (err) {
-    console.error(err);
-    process.exit(1);
-  }
-  console.log(`🚀 Servidor rodando em ${address}`);
-});
+main()

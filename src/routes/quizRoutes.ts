@@ -1,7 +1,7 @@
-
-import { FastifyInstance } from "fastify";
-import { getRandomQuestion } from "../controllers/quizController";
+import { FastifyInstance } from 'fastify'
+import { getQuizQuestions } from '../controllers/quizController'
+import { authenticate } from '../controllers/authController'
 
 export async function quizRoutes(app: FastifyInstance) {
-  app.get("/quiz/random", getRandomQuestion);
+  app.get('/quiz', { preHandler: [authenticate] }, getQuizQuestions)
 }

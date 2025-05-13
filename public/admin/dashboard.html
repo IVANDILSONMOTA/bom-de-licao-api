@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard do Admin</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>📊 Estatísticas Gerais</h1>
+    <ul id="stats-list">
+      <li>Total de Usuários: <span id="total-users">...</span></li>
+      <li>Total de Admins: <span id="total-admins">...</span></li>
+      <li>Total de Perguntas: <span id="total-questions">...</span></li>
+      <li>Total de Partidas: <span id="total-games">...</span></li>
+    </ul>
+    <a href="/admin/index.html" class="btn">⬅ Voltar</a>
+  </div>
+  <script>
+    async function carregarEstatisticas() {
+      const res = await fetch('/admin/stats');
+      const data = await res.json();
+      document.getElementById('total-users').textContent = data.totalUsers;
+      document.getElementById('total-admins').textContent = data.totalAdmins;
+      document.getElementById('total-questions').textContent = data.totalQuestions;
+      document.getElementById('total-games').textContent = data.totalGames;
+    }
+
+    carregarEstatisticas();
+  </script>
+</body>
+</html>
