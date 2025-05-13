@@ -12,6 +12,12 @@ async function criarAdmin() {
       email: "admin@email.com",
       password: senhaCriptografada,
       contact: "11999999999",
+      cpf: "00000000000",
+      birthDate: new Date("1990-01-01"),
+      state: "SP",
+      city: "São Paulo",
+      district: "Centro",
+      church: "Igreja Central",
       isAdmin: true
     }
   });
