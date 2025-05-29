@@ -1,8 +1,7 @@
-
 import { FastifyRequest, FastifyReply } from "fastify";
 import { prisma } from "../lib/prisma";
 
-export async function getRandomQuestion(request: FastifyRequest, reply: FastifyReply) {
+export async function getQuizQuestions(request: FastifyRequest, reply: FastifyReply) {
   try {
     const { category, difficulty } = request.query as any;
 

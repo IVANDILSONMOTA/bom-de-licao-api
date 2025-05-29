@@ -1,4 +1,3 @@
-
 import { FastifyRequest, FastifyReply } from "fastify";
 import { prisma } from "../lib/prisma";
 
@@ -29,7 +28,7 @@ export async function listarUsuarios(request: FastifyRequest, reply: FastifyRepl
   return reply.send(usuarios);
 }
 
-
+// Atualizar pergunta
 export async function updatePergunta(request: FastifyRequest, reply: FastifyReply) {
   const id = Number((request.params as any).id);
   const { question, optionA, optionB, optionC, optionD, answer, category, difficulty } = request.body as any;
@@ -54,9 +53,9 @@ export async function updatePergunta(request: FastifyRequest, reply: FastifyRepl
   }
 }
 
-
+// Promover usuário a admin
 export async function promoverUsuario(request: FastifyRequest, reply: FastifyReply) {
-  const id = Number((request.params as any).id);
+  const id = Number((request.params as any).userId);
   try {
     const user = await prisma.user.update({
       where: { id },
