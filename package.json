@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "postinstall": "npx prisma generate",
+    "generate": "prisma generate",
     "start": "node dist/server.js"
   },
   "keywords": [],
@@ -20,7 +20,7 @@
     "fastify": "^5.3.2",
     "jsonwebtoken": "^9.0.2",
     "prisma": "^6.8.2",
-    "tsx": "^4.19.4",
+    "tsx": "^4.9.4",
     "zod": "^3.24.3"
   },
   "devDependencies": {
