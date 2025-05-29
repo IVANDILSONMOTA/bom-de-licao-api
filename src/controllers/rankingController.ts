@@ -1,4 +1,3 @@
-
 import { FastifyRequest, FastifyReply } from "fastify";
 import { prisma } from "../lib/prisma";
 
@@ -36,7 +35,7 @@ export async function getRanking(request: FastifyRequest, reply: FastifyReply) {
       take: 10
     });
 
-    const ranking = top.map((item, index) => ({
+    const ranking = top.map((item: any, index: number) => ({
       rank: index + 1,
       name: item.user.name,
       score: item.score,
